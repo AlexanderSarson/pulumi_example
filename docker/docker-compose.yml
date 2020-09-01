@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
   nginx-proxy:
@@ -38,19 +38,12 @@ services:
     command: --cleanup #--debug for verbose logging, --interval xx for custom interval in seconds
     restart: always
 
-  pp:
+  ii:
     image: "containous/whoami"
     container_name: "simple-pp"
     environment:
-      - "VIRTUAL_HOST=pp.sarson.codes"
-      - "LETSENCRYPT_HOST=pp.sarson.codes"
-
-  oo:
-    image: "containous/whoami"
-    container_name: "simple-oo"
-    environment:
-      - "VIRTUAL_HOST=oo.sarson.codes"
-      - "LETSENCRYPT_HOST=oo.sarson.codes"
+      - "VIRTUAL_HOST=ii.sarson.codes"
+      - "LETSENCRYPT_HOST=ii.sarson.codes"
 
   spark:
     image: "alexandersarson/sparkjava:v3"
