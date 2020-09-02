@@ -6,7 +6,7 @@ import { getFileHash } from "./util";
 
 const config = new pulumi.Config();
 
-const sshkey_docker = new digitalocean.SshKey("docker", {publicKey: fs.readFileSync(".ssh/id_rsa.pub").toString()});
+const sshkey_docker = new digitalocean.SshKey("docker", {publicKey: fs.readFileSync("ssh/id_rsa.pub").toString()});
 
 const droplet = new digitalocean.Droplet("docker", {
   image: "ubuntu-20-04-x64",
@@ -30,7 +30,7 @@ const wildcard = new digitalocean.DnsRecord("wildcard", {
 const conn: provisioners.ConnectionArgs = {
   host: droplet.ipv4Address,
   username: "root",
-  privateKey: fs.readFileSync(".ssh/id_rsa").toString()
+  privateKey: fs.readFileSync("ssh/id_rsa").toString()
 };
 
 const changeToken = getFileHash("/docker/docker-compose.yml");
