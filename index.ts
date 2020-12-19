@@ -35,7 +35,7 @@ const conn: provisioners.ConnectionArgs = {
 
 const changeToken = getFileHash("/docker/docker-compose.yml");
 
-const copyComposeConfig = new provisioners.CopyFile("compose_copy", {
+const copyComposeConfig = new provisioners.CopyFile(changeToken, {
   conn,
   changeToken,
   src: "docker/docker-compose.yml",
@@ -72,10 +72,10 @@ const dockerComposeConfig = new provisioners.RemoteExec("install-docker-compose"
   command: 'sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose',
 }, { dependsOn: [dockerConfig]})
 
-const dockerComposeContainersConfig = new provisioners.RemoteExec("deploy-containers", {
+const dockerComposeContainersConfig = new provisioners.RemoteExec(changeToken, {
   changeToken,
   conn,
-  command: "sudo docker-compose -f /home/docker/docker-compose.yml up -d --no-recreate ",
+  command: "sudo docker-compose -f /home/docker/docker-compose.yml up -d --no-recreate --remove-orphans",
 }, { dependsOn: [dockerComposeConfig, copyComposeConfig]})
 
 export const ip = droplet.ipv4Address;

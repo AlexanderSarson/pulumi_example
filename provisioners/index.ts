@@ -124,7 +124,6 @@ export class CopyFile extends pulumi.ComponentResource {
 
     constructor(name: string, args: CopyFileArgs, opts?: pulumi.ComponentResourceOptions) {
         super("pulumi:provisioners:CopyFile", name, args, opts);
-
         this.provisioner = new Provisioner<ConnectionArgs, never>(
             `${name}-provisioner`,
             {

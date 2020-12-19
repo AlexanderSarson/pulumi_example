@@ -1,4 +1,4 @@
-FROM pulumi/pulumi-nodejs:2.9.1-debian
+FROM pulumi/pulumi-nodejs:2.15.6-debian
 
 RUN apt-get update && \
     apt-get install -y zsh wget

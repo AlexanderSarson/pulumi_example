@@ -13,28 +13,41 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myresolver.acme.email=EXAMPLE@EXAMPLE.com"
+      - "--certificatesresolvers.myresolver.acme.email=ok@outlook.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
     ports:
       - "443:443"
       - "8080:8080"
     volumes:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+      
   watchtower:
     image: containrrr/watchtower
     container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --cleanup # --debug --interval 30 #--debug for verbose logging, --interval xx for custom interval in seconds
+    command: --cleanup --debug --interval 600 #--debug for verbose logging, --interval xx for custom interval in seconds
     restart: always
+    labels: 
+      - "com.centurylinklabs.watchtower.enable=false"
 
-  spark:
-    image: "alexandersarson/sparkjava"
-    scale: 2
+  whoami:
+    image: "containous/whoami"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.CHANGEME.rule=Host(`example.domain.com`)"
-      - "traefik.http.routers.CHANGEME.entrypoints=websecure"
-      - "traefik.http.routers.CHANGEME.tls.certresolver=myresolver"
+      - "traefik.http.routers.test.rule=Host(`test.sarson.codes`)"
+      - "traefik.http.routers.test.entrypoints=websecure"
+      - "traefik.http.routers.test.tls.certresolver=myresolver"
+  
+  whoami2:
+    image: "containous/whoami"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.test2.rule=Host(`test2.sarson.codes`)"
+      - "traefik.http.routers.test2.entrypoints=websecure"
+      - "traefik.http.routers.test2.tls.certresolver=myresolver"
